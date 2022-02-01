@@ -63,8 +63,8 @@ class Client:
             sys.exit(1)
 
         # Ensure keys and rows are ordered as received from API
-        return response.json(object_pairs_hook=OrderedDict)
-        # return response.json
+        # return response.json(object_pairs_hook=OrderedDict)
+        return response.json()
 
     def request_pages(self, url, params):
         data = self.get_request(url=url, params=params)

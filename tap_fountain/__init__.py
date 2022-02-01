@@ -10,7 +10,7 @@ LOGGER = singer.get_logger()
 
 REQUIRED_CONFIG_KEYS = {
     "api_token",
-    "start_date",
+    "applicants_start_date",
     "user_activity_start_date"
 }
 

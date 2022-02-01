@@ -37,12 +37,12 @@ def get_activity_stop(start_datetime, days=30):
     return min(start_datetime + datetime.timedelta(days=days), end_time)
 
 
-def get_start(key, state, config):
+def get_applicants_start(key, state, config):
     if key in state:
         return convert_to_utc(state[key])
 
-    if "start_date" in config:
-        return convert_to_utc(config["start_date"])
+    if "applicants_start_date" in config:
+        return convert_to_utc(config["applicants_start_date"])
 
     start = datetime.datetime.utcfromtimestamp(0).replace(tzinfo=datetime.timezone.utc)
     return start
@@ -57,7 +57,7 @@ def sync_applicants(streams, client, config, state):
     schema = streams.get(stream_name).schema.to_dict()
     singer.write_schema(stream_name, schema, stream_obj.key_properties)
 
-    from_datetime = get_start(stream_name, state, config)
+    from_datetime = get_applicants_start(stream_name, state, config)
     to_datetime = utils.now()
 
     if to_datetime < from_datetime:
@@ -141,10 +141,9 @@ def sync_transitions(streams, client, ids):
 
     chunk_size = 1000
     with singer.metrics.record_counter(stream_name) as counter:
-        for i in utils.chunk(ids, chunk_size):
-            batch = ids[i:i+chunk_size]
+        for chunk in utils.chunk(ids, chunk_size):
             data = {
-                "ids": batch
+                "ids": chunk
             }
             data = json.dumps(data)
             response = client.post_request(stream_obj.endpoint, data)
