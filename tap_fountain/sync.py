@@ -96,7 +96,7 @@ def sync_applicants(streams, client, config, state):
         LOGGER.info('FINISHED Syncing stream: Stream Name:[{}], Total Records:[{}], Total Pages:[{}]'
                     .format(stream_name, counter.value, len(pages)))
     utils.update_state(state, stream_name, bookmark)
-    # sync_applicant_info(streams, client, applicants_ids)
+    sync_applicant_info(streams, client, applicants_ids)
     sync_transitions(streams, client, applicants_ids)
     singer.write_state(state)
 
@@ -295,6 +295,6 @@ def do_sync(config, state, catalog, client):
         # stream.sync()  # pylint: disable=not-callable
     # STATE["this_stream"] = None
     sync_applicants(selected_streams, client, config, current_state)
-    # sync_funnels(selected_streams, client)
-    # sync_users(selected_streams, client, config, current_state)
+    sync_funnels(selected_streams, client)
+    sync_users(selected_streams, client, config, current_state)
     LOGGER.info("Sync completed")
