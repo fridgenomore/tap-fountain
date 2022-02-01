@@ -33,8 +33,7 @@ def get_activity_start(key, state, config):
 
 
 def get_activity_stop(start_datetime, days=30):
-    end_time = datetime.datetime.utcnow()
-    end_time = end_time.replace(tzinfo=datetime.timezone.utc)
+    end_time = utils.now()
     return min(start_datetime + datetime.timedelta(days=days), end_time)
 
 
@@ -59,8 +58,7 @@ def sync_applicants(streams, client, config, state):
     singer.write_schema(stream_name, schema, stream_obj.key_properties)
 
     from_datetime = get_start(stream_name, state, config)
-    to_datetime = datetime.datetime.utcnow()
-    to_datetime = to_datetime.replace(tzinfo=datetime.timezone.utc)
+    to_datetime = utils.now()
 
     if to_datetime < from_datetime:
         LOGGER.error("to_datetime (%s) is less than from_endtime (%s).", to_datetime, from_datetime)
@@ -143,7 +141,7 @@ def sync_transitions(streams, client, ids):
 
     chunk_size = 1000
     with singer.metrics.record_counter(stream_name) as counter:
-        for i in range(0, len(ids), chunk_size):
+        for i in utils.chunk(ids, chunk_size):
             batch = ids[i:i+chunk_size]
             data = {
                 "ids": batch
