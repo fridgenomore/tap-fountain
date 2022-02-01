@@ -7,39 +7,30 @@
         "string"
       ]
     },
-    "transitions": {
+    "stage_id": {
       "type": [
         "null",
-        "array"
+        "string"
+      ]
+    },
+    "stage_title": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "null",
+        "string"
       ],
-      "transitions": {
-        "title": "transition",
-        "type": [
-          "null",
-          "object"
-        ],
-        "properties": {
-          "stage_id": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "stage_title": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "created_at": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          }
-        }
-      }
+      "format": "date-time"
+    },
+    "raw_json": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }

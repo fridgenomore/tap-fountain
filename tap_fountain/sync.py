@@ -154,8 +154,13 @@ def sync_transitions(streams, client, ids):
                 applicant_id = applicant.get("applicant_id")
                 for transition in applicant.get("transitions", []):
                     with Transformer() as transformer:
-                        record = {"applicant_id": applicant_id}
-                        record.update(transition)
+                        record = {
+                            "applicant_id": applicant_id,
+                            "stage_id": transition.get("stage_id"),
+                            "stage_title": transition.get("stage_title"),
+                            "created_at": transition.get("created_at"),
+                            "raw_json": transition
+                        }
                         records_tf = transformer.transform(data=record, schema=schema)
                         singer.write_record(stream_name, records_tf)
                         counter.increment()
