@@ -179,7 +179,6 @@ def sync_funnels(streams, client):
     response = client.get_request(stream_obj.endpoint)
     funnels.extend(response.get('funnels'))
     next = response.get('next')
-    print("funnels:", funnels)
 
     while next is not None:
         params = {"page": next}
