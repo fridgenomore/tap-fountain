@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "properties": {
+    "applicant_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "transitions": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "transitions": {
+        "title": "transition",
+        "type": [
+          "null",
+          "object"
+        ],
+        "properties": {
+          "stage_id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "stage_title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "created_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

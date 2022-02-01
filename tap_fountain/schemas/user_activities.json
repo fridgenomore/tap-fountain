@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "raw_json": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  }
+}
