@@ -51,8 +51,8 @@ class Stream(object):
 STREAMS = {
     "applicants": Stream("applicants", ["id"], "INCREMENTAL", ["updated_at"], "https://api.fountain.com/v2/applicants"),
     "applicant_info": Stream("applicant_info", ["id"], "INCREMENTAL", [], "https://api.fountain.com/v2/applicants"),
-    "transitions": Stream("transitions", ["applicant_id"], "INCREMENTAL", [], "https://api.fountain.com/v2/applicants/transitions"),
+    "transitions": Stream("transitions", ["stage_id"], "INCREMENTAL", [], "https://api.fountain.com/v2/applicants/transitions"),
     "funnels": Stream("funnels", ["id"], "FULL_TABLE", [], "https://api.fountain.com/v2/funnels"),
     "users": Stream("users", ["id"], "FULL_TABLE", [], "https://api.fountain.com/v2/users"),
-    "user_activities": Stream("user_activities", ["user_id", "id"], "INCREMENTAL", [], "https://api.fountain.com/v2/user_activities")
+    "user_activities": Stream("user_activities", ["id"], "INCREMENTAL", [], "https://api.fountain.com/v2/user_activities")
 }
