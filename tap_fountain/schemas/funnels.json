@@ -17,7 +17,7 @@
     "raw_json": {
       "type": [
         "null",
-        "string"
+        "object"
       ]
     }
   }
