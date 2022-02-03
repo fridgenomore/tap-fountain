@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tap-fountain",
-    version="0.1.0",
+    version="0.9.0",
     description="Singer.io tap for extracting date from fountain via API",
     author="FNM",
     url="https://github.com/fridgenomore/tap-fountain",
