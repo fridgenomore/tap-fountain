@@ -9,7 +9,6 @@ from tap_fountain.streams import STREAMS
 
 LOGGER = singer.get_logger()
 
-# This order matters
 RAW_DATA_FIELDS = (
     "id",
     "created_at",
@@ -112,12 +111,12 @@ def sync_applicant_info(streams, client, ids):
     singer.write_schema(stream_name, schema, stream_obj.key_properties)
 
     with singer.metrics.record_counter(stream_name) as counter:
-        for id in ids:
-            # url ='{}/{}'.format(stream_obj.endpoint, id)
-            url = os.path.join(stream_obj.endpoint, id)
-            data = client.get_request(url)
+        with Transformer() as transformer:
+            for id in ids:
+                # url ='{}/{}'.format(stream_obj.endpoint, id)
+                url = os.path.join(stream_obj.endpoint, id)
+                data = client.get_request(url)
 
-            with Transformer() as transformer:
                 record = {}
                 for header in RAW_DATA_FIELDS:
                     record[header] = data.get(header)
@@ -141,26 +140,21 @@ def sync_transitions(streams, client, ids):
 
     chunk_size = 1000
     with singer.metrics.record_counter(stream_name) as counter:
-        for chunk in utils.chunk(ids, chunk_size):
-            data = {
-                "ids": chunk
-            }
-            data = json.dumps(data)
-            response = client.post_request(stream_obj.endpoint, data)
-            for applicant in response:
-                applicant_id = applicant.get("applicant_id")
-                for transition in applicant.get("transitions", []):
-                    with Transformer() as transformer:
-                        record = {
-                            "applicant_id": applicant_id,
-                            "stage_id": transition.get("stage_id"),
-                            "stage_title": transition.get("stage_title"),
-                            "created_at": transition.get("created_at"),
-                            "raw_json": transition
-                        }
-                        records_tf = transformer.transform(data=record, schema=schema)
-                        singer.write_record(stream_name, records_tf)
-                        counter.increment()
+        with Transformer() as transformer:
+            for chunk in utils.chunk(ids, chunk_size):
+                data = {
+                    "ids": chunk
+                }
+                data = json.dumps(data)
+                response = client.post_request(stream_obj.endpoint, data)
+                for applicant in response:
+                    record = {
+                        "applicant_id": applicant.get("applicant_id"),
+                        "raw_json": {"transitions": applicant.get("transitions", [])}
+                    }
+                    records_tf = transformer.transform(data=record, schema=schema)
+                    singer.write_record(stream_name, records_tf)
+                    counter.increment()
         LOGGER.info('FINISHED Syncing stream: Stream Name:[{}], Total Records:[{}]'
                     .format(stream_name, counter.value))
 
@@ -187,8 +181,8 @@ def sync_funnels(streams, client):
         next = response.get('next')
 
     with singer.metrics.record_counter(stream_name) as counter:
-        for funnel in funnels:
-            with Transformer() as transformer:
+        with Transformer() as transformer:
+            for funnel in funnels:
                 record = {
                     "id": funnel.get('id'),
                     "created_at": funnel.get('created_at'),
@@ -214,8 +208,8 @@ def sync_users(streams, client, config, state):
     user_ids = []
     response = client.get_request(stream_obj.endpoint)
     with singer.metrics.record_counter(stream_name) as counter:
-        for user in response.get('users', []):
-            with Transformer() as transformer:
+        with Transformer() as transformer:
+            for user in response.get('users', []):
                 record = user
                 records_tf = transformer.transform(data=record, schema=schema)
                 singer.write_record(stream_name, records_tf)

@@ -7,25 +7,6 @@
         "string"
       ]
     },
-    "stage_id": {
-      "type": [
-        "null",
-        "string"
-      ]
-    },
-    "stage_title": {
-      "type": [
-        "null",
-        "string"
-      ]
-    },
-    "created_at": {
-      "type": [
-        "null",
-        "string"
-      ],
-      "format": "date-time"
-    },
     "raw_json": {
       "type": [
         "null",
